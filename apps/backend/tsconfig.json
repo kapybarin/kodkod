@@ -1,0 +1,14 @@
+{
+  "extends": "@workspace/typescript-config/backend.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+      "outDir": "./dist",
+      "rootDir": "."
+  },
+  "include": [
+    "./"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
