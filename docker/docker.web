@@ -1,5 +1,5 @@
 # Multi-stage Dockerfile for Kotlin/Wasm Frontend
-FROM gradle:8.14.4-jdk21 AS build
+FROM gradle:9.4.0-jdk21 AS build
 
 # Set working directory
 WORKDIR /app
