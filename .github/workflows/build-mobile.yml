@@ -12,9 +12,6 @@ jobs:
   build_android:
     name: Build Android app
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ env.SAMPLE_PATH }}
 
     steps:
       - name: Checkout
@@ -30,20 +27,17 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Build app
-        run: ./gradlew :mobile:assembleDebug
+        run: ./gradlew :androidApp:assembleDebug
 
       - name: Upload Android debug APK
         uses: actions/upload-artifact@v4
         with:
           name: android-apk
-          path: mobile/build/outputs/apk/debug/*.apk
+          path: androidApp/build/outputs/apk/debug/*.apk
 
   build_ios:
     name: Build iOS app
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: ${{ env.SAMPLE_PATH }}
 
     steps:
       - name: Checkout
