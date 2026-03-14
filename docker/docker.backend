@@ -1,16 +1,11 @@
 # Multi-stage Dockerfile for Kotlin Backend
-FROM gradle:9.4.0-jdk21 as build
+FROM gradle:9.4.0-jdk21 AS build
 
 # Setup workdir
 WORKDIR = /app
 
-# Copy gradle configuration files
-COPY ../gradle/ gradle/
-COPY ../gradlew ../gradlew.bat ../gradle.properties ../settings.gradle.kts ../build.gradle.kts ./
-
-# Copy source code for shared and backend modules
-COPY ../shared/ shared/
-COPY ../server/ server/
+# Copy source code
+COPY ../ .
 
 # Setup for build
 RUN apt-get update && apt-get install -y libatomic1
