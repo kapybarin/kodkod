@@ -1,4 +1,34 @@
 # Multi-stage Dockerfile for Kotlin Backend
-FROM gradle:8.14.4-jdk21
+FROM gradle:8.14.4-jdk21 as build
 
-COPY
+# Setup workdir
+WORKDIR = /app
+
+# Copy gradle configuration files
+COPY ../gradle/ gradle/
+COPY ../gradlew ../gradlew.bat ../gradle.properties ../settings.gradle.kts ../build.gradle.kts ./
+
+# Copy source code for shared and backend modules
+COPY ../shared/ shared/
+COPY ../server/ server/
+
+# Setup for build
+RUN apt-get update && apt-get install -y libatomic1
+
+# Build the backend distribution
+RUN gradle :server:installDist --no-daemon  --stacktrace
+
+# Production stage
+FROM eclipse-temurin:21-jre
+
+# Set working directory
+WORKDIR /app
+
+# Copy the built distribution
+COPY --from=build /app/server/build/install/server/ ./
+
+# Expose backend port
+EXPOSE 8080
+
+# Run the application
+CMD ["./bin/server"]

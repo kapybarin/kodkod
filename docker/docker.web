@@ -1,0 +1,33 @@
+# Multi-stage Dockerfile for Kotlin/Wasm Frontend
+FROM gradle:8.14.4-jdk21 AS build
+
+# Set working directory
+WORKDIR /app
+
+# Copy gradle configuration files
+COPY ../gradle/ gradle/
+COPY ../gradlew ../gradlew.bat ../gradle.properties ../settings.gradle.kts ../build.gradle.kts ./
+
+# Copy source code for shared and frontend modules
+COPY ../shared/ shared/
+COPY ../composeApp/ composeApp/
+
+# Setup for build
+RUN apt-get update && apt-get install -y libatomic1
+
+# Build the frontend application
+RUN gradle :composeApp:wasmJsBrowserDistribution --no-daemon --stacktrace
+
+# Production stage with nginx
+FROM nginx:alpine
+
+RUN apk add --no-cache libatomic
+
+# Copy built frontend assets
+COPY --from=build /app/composeApp/build/dist/wasmJs/productionExecutable/ /usr/share/nginx/html/
+
+# Expose port 80
+EXPOSE 80
+
+# Start nginx
+CMD ["nginx", "-g", "daemon off;"]
