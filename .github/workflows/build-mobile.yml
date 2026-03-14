@@ -1,10 +1,10 @@
 name: Build and publish mobile apps
 
-# Configures this workflow to run every time a change is pushed to the main branch
+# Configures this workflow to run every time a change is pushed to the master branch
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
     tags:
       - 'v*'
 
