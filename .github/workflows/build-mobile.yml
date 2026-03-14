@@ -1,0 +1,12 @@
+name: Build and publish mobile apps
+
+# Configures this workflow to run every time a change is pushed to the branch called `release`.
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
+
+
+jobs:
